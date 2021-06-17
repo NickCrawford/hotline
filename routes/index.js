@@ -3,7 +3,10 @@ var router = express.Router();
 var twilio = require("twilio");
 var env = require("dotenv").config();
 
-const client = twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
