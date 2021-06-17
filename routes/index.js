@@ -16,7 +16,7 @@ router.get("/", function (req, res, next) {
 router.post("/humor-hotline", function (req, res, next) {
   // route code here
   const number = req.body.number.replace("[()\\s-]+", "");
-  const host = "https://a01cdfd23807.ngrok.io";
+  const host = "http://143.244.164.132:5000/";
 
   client.calls
     .create({
