@@ -5,7 +5,7 @@ var env = require("dotenv").config();
 
 const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
+  process.env.
 );
 
 /* GET home page. */
@@ -16,7 +16,7 @@ router.get("/", function (req, res, next) {
 router.post("/humor-hotline", function (req, res, next) {
   // route code here
   const number = req.body.number.replace("[()\\s-]+", "");
-  const host = "http://143.244.164.132:5000/";
+  const host = "http://143.244.164.132:5000";
 
   client.calls
     .create({
