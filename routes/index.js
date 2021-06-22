@@ -108,12 +108,9 @@ router.post("/voice-response", function (req, res, next) {
   const voice = "Polly.Amy";
 
   // creates the text-to-speech response
-  twiml.say(
-    "Hello! Thank you for calling the Quarter-Life Crisis Hotline. I hope this message finds you well!",
-    {
-      voice: voice,
-    }
-  );
+  twiml.say("Hello! Thank you for calling the Quarter-Life Crisis Hotline.", {
+    voice: voice,
+  });
   twiml.pause({ length: 0.5 });
 
   twiml.say(
@@ -124,15 +121,15 @@ router.post("/voice-response", function (req, res, next) {
   );
   twiml.pause({ length: 0.5 });
 
-  twiml.say(
-    "Alright, give me just one second and I'll come up with some suggestions for you.",
-    {
-      voice: voice,
-    }
-  );
-  twiml.pause({ length: 2 });
+  // twiml.say(
+  //   "Give me just one second and I'll come up with some suggestions for you.",
+  //   {
+  //     voice: voice,
+  //   }
+  // );
+  // twiml.pause({ length: 2 });
 
-  twiml.say("Okay, ready! The universe is telling me that you should...", {
+  twiml.say("The universe is telling me that you should...", {
     voice: voice,
   });
 
@@ -140,13 +137,11 @@ router.post("/voice-response", function (req, res, next) {
   twiml.say(jokes[indexOne], {
     voice: voice,
   });
-  twiml.pause({ length: 0.1 });
 
   // Plus "and/or"
   twiml.say("and", {
     voice: voice,
   });
-  twiml.pause({ length: 0.1 });
 
   // Say option two
   twiml.say(jokes[indexTwo], {
