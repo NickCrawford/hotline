@@ -31,6 +31,16 @@ a {
   min-width: 200px;
 
   height: auto;
+
+  
+  transform: rotate(0deg);
+
+  cursor: pointer;
+}
+
+#avo:hover {
+  transform: rotate(36000deg);
+  transition: transform 60s linear;
 }
 
 .main-content {
@@ -124,4 +134,14 @@ footer {
 footer a, footer h2 {
   display: block;
   width: auto;
+}
+
+article {
+  font-size: 18px;
+  line-height: 2;
+  max-width: 40em;
+
+  margin: 0 auto;
+
+  text-align: left;
 }

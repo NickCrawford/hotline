@@ -14,7 +14,15 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/suggest", function (req, res, next) {
-  res.render("suggest", { title: "Quarter-Life Crisis Hotline" });
+  res.render("suggest", { title: "Quarter-Life Crisis Hotline - Suggest" });
+});
+
+router.get("/about", function (req, res, next) {
+  res.render("about", { title: "Quarter-Life Crisis Hotline - About" });
+});
+
+router.get("/resources", function (req, res, next) {
+  res.render("resources", { title: "Quarter-Life Crisis Hotline - About" });
 });
 
 router.post("/humor-hotline", function (req, res, next) {
