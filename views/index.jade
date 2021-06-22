@@ -1,9 +1,27 @@
 extends layout
 
 block content
-  form(action="/humor-hotline" name="humor-hotline", method="post")
-    div.input
-      span.label Your Phone Number (include country code!)
-      input(type="phone", name="number")
-    div.actions
-      input(type="submit", value="Prepare to Laugh!")
+  main.main-content
+    section#hero
+      img#avo(src="images/avocado.png", alt="avocado", srcset="")
+      figure#hotline-container 
+        img.hotline.text(src="images/hotline-text.svg", alt="(812) ITS-FINE")
+        img.hotline.number(src="images/hotline-number.svg", alt="(812) 487-3463")
+      h1 Quarter-Life Crisis Hotline
+
+    footer
+      a(href='/suggest')
+        h2 Submit a suggestion
+      
+      a(href='/suggest')
+        h2 Get real help
+
+      a(href='/suggest')
+        h2 What is this?
+
+  //- form(action="/humor-hotline" name="humor-hotline", method="post")
+  //-   div.input
+  //-     span.label Your Phone Number (include country code!)
+  //-     input(type="phone", name="number")
+  //-   div.actions
+  //-     input(type="submit", value="Prepare to Laugh!")
