@@ -44,7 +44,7 @@ router.post("/humor-hotline", function (req, res, next) {
     });
 });
 
-router.post("sms-response", function (req, res, next) {
+router.post("/sms-response", function (req, res, next) {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   // Start our TwiML response.
   const twiml = new MessagingResponse();
