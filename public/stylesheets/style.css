@@ -36,6 +36,8 @@ a {
   transform: rotate(0deg);
 
   cursor: pointer;
+  clip-path: circle(60%);
+  opacity: 0.95;
 }
 
 #avo:hover {

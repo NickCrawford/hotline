@@ -44,6 +44,23 @@ router.post("/humor-hotline", function (req, res, next) {
     });
 });
 
+router.post("sms-response", function (req, res, next) {
+  const MessagingResponse = twilio.twiml.MessagingResponse;
+  // Start our TwiML response.
+  const twiml = new MessagingResponse();
+
+  // Add a text message.
+  const msg = twiml.message(
+    "Thanks for texting the Quarter-Life Crisis Hotline. Give us a call at (812) 487-3463"
+  );
+
+  // Add a picture message.
+  msg.media("https://quarterlifecris.is/social-preview.jpg");
+
+  res.writeHead(200, { "Content-Type": "text/xml" });
+  res.end(twiml.toString());
+});
+
 router.post("/voice-response", function (req, res, next) {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
