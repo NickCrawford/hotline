@@ -61,6 +61,11 @@ h1 {
   font-size: calc(2vw + 1.25rem);
   text-transform: uppercase;
   
+  position: relative;
+  display: inline-block;
+
+  margin: 0.5em auto;
+
   /* text-align: left; */
 }
 
@@ -71,15 +76,35 @@ h2 {
   /* text-align: left; */
 }
 
+.the-the {
+  display: block;
+  width: 2.5rem;
+  height: auto;
+  margin: 0 auto;
+
+  transform-origin: center center;
+  transform: translate(-0.25rem, 0rem);
+}
+
 @media screen and (min-width: 768px) {
 
   /* h1, h2 { text-align: center; } */
+
+  .the-the {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 3rem;
+    height: auto;
+
+    transform: rotate(-15deg) translate(-1.5rem, 0.5rem);
+  }
 }
 
 
 
 /* #hotline-container {
-  padding: 
+  margin-bottom: 1rem;
 } */
 
 .hotline {
@@ -105,6 +130,8 @@ h2 {
   display: block;
 }
 
+
+
 #suggest-form {
   width: 100%;
   max-width: 30rem;
@@ -129,6 +156,8 @@ footer {
 
   align-items: center;
   justify-content: center;
+
+  padding-top: 2rem;
 }
 
 footer a, footer h2 {
