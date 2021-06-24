@@ -153,7 +153,8 @@ router.post("/say-joke", function (req, res, next) {
   const emojiTwo =
     allowedEmoji[Math.floor(Math.random() * allowedEmoji.length)];
 
-  let msg = twiml.message(
+  let msg = twiml.message();
+  msg.body(
     prompt +
       "\n\n" +
       emojiOne +
@@ -161,7 +162,7 @@ router.post("/say-joke", function (req, res, next) {
       jokes[indexOne] +
       " " +
       emojiOne +
-      +"\n~ and ~\n" +
+      "\n~ and ~\n" +
       emojiTwo +
       " " +
       jokes[indexTwo] +
