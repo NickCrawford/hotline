@@ -104,8 +104,8 @@ router.post("/say-joke", (request, response, next) => {
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
 
-  const indexOne = Math.floor(Math.random() * jokes.length);
-  const indexTwo = Math.floor(Math.random() * jokes.length);
+  let indexOne = Math.floor(Math.random() * jokes.length);
+  let indexTwo = Math.floor(Math.random() * jokes.length);
 
   if (indexOne == indexTwo) indexTwo = Math.floor(Math.random() * jokes.length);
 

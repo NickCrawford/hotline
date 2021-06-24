@@ -165,8 +165,8 @@ router.post("/say-joke", function (req, res, next) {
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];
   // Add a text message.
 
-  const indexOne = Math.floor(Math.random() * jokes.length);
-  const indexTwo = Math.floor(Math.random() * jokes.length);
+  let indexOne = Math.floor(Math.random() * jokes.length);
+  let indexTwo = Math.floor(Math.random() * jokes.length);
 
   if (indexOne == indexTwo) indexTwo = Math.floor(Math.random() * jokes.length);
 
