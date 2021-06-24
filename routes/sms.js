@@ -261,7 +261,7 @@ router.post("/say-joke", function (req, res, next) {
         .catch((err) => {
           res.send(err);
         });
-    }, 10000);
+    }, 20000);
   }
 
   req.session.state = STATES.JOKE_SENT;
