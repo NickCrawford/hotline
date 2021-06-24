@@ -72,7 +72,7 @@ router.post("/", function (req, res, next) {
     );
 
     // Add a picture message.
-    msg.media("https://quarterlifecris.is/social-preview.jpg");
+    // msg.media("https://quarterlifecris.is/social-preview.jpg");
     req.session.state = STATES.WAITING_FOR_PERSON;
   }
 
@@ -142,13 +142,18 @@ router.post("/get-number", (req, res) => {
       res.send(err);
     });
 
-  const MessagingResponse = twilio.twiml.MessagingResponse;
-  const twiml = new MessagingResponse();
-
-  twiml.message("Got it! Thanks. We'll take it from here.");
-
-  res.writeHead(200, { "Content-Type": "text/xml" });
-  res.send(twiml.toString());
+  client.messages
+    .create({
+      body: "Got it! Thanks. We'll take it from here.",
+      from: "+18124873463",
+      to: req.body.From,
+    })
+    .then((message) => {
+      res.send(message);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 //// SMS RESPONSE
@@ -255,7 +260,7 @@ router.post("/say-joke", function (req, res, next) {
         .catch((err) => {
           res.send(err);
         });
-    }, 3000);
+    }, 10000);
   }
 
   req.session.state = STATES.JOKE_SENT;
