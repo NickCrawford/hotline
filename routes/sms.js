@@ -250,7 +250,7 @@ router.post("/say-joke", function (req, res, next) {
     setTimeout(() => {
       client.messages
         .create({
-          body: "Have a friend going through their own quarter-life crisis? Reply 'friend' to share this!\n\nReply 'suggest' if you'd like to leave a new quarter-life crisis idea for others. \n",
+          body: "Have a friend going through their own quarter-life crisis? Reply 'friend' to share this!\n\nReply 'suggest' if you'd like to leave a new quarter-life crisis idea for others. \n  https://quarterlifecris.is",
           from: "+18124873463",
           to: req.body.From,
         })
