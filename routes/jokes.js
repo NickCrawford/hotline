@@ -28,11 +28,11 @@ const jokes = [
   "Get married too soon",
   "Start a podcast about dating",
   "Start a podcast about crypto",
-  "Get really into doge coin",
+  "Get really into Dogecoin",
   "Rob a bank",
   "Start going to therapy",
-  "Become low-key alcoholic",
-  "Become high-key alcoholic",
+  "Become a low-key alcoholic",
+  "Become a high-key alcoholic",
   "Quit your salaried job to become a bartender",
   "Start brewing IPAs in your kitchen",
   "Get really into 3D printing ",
@@ -47,6 +47,7 @@ const jokes = [
   "Start a band",
   "Start a skater girl gang",
   "Binge watch all the documentaries",
+  "Adopt a dog",
 ];
 
 module.exports = jokes;

@@ -186,7 +186,7 @@ router.post("/say-joke", function (req, res, next) {
 
   req.session.state = STATES.JOKE_SENT;
 
-  res.writeHead(200, { "Content-Type": "text/xml" });
+  // res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(twiml.toString());
 });
 
