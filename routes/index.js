@@ -2,12 +2,16 @@ var express = require("express");
 var router = express.Router();
 var twilio = require("twilio");
 var env = require("dotenv").config();
+const jokes = require("./jokes");
 
-const client = twilio(
+export const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
 );
 
+const voice = "Polly.Amy";
+
+/// PAGES
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Quarter-Life Crisis Hotline" });
@@ -25,6 +29,9 @@ router.get("/resources", function (req, res, next) {
   res.render("resources", { title: "Quarter-Life Crisis Hotline - About" });
 });
 
+///
+////// OUTBOUND CALLING
+///
 router.post("/humor-hotline", function (req, res, next) {
   // route code here
   const number = req.body.number.replace("[()\\s-]+", "");
@@ -32,9 +39,9 @@ router.post("/humor-hotline", function (req, res, next) {
 
   client.calls
     .create({
-      url: `${host}/voice-response`,
+      url: `${host}/call-a-friend`,
       to: `+${number}`,
-      from: "+12565768775",
+      from: "+18124873463",
     })
     .then((call) => {
       res.send(call);
@@ -44,107 +51,56 @@ router.post("/humor-hotline", function (req, res, next) {
     });
 });
 
-router.post("/sms-response", function (req, res, next) {
-  const MessagingResponse = twilio.twiml.MessagingResponse;
-  // Start our TwiML response.
-  const twiml = new MessagingResponse();
-
-  // Add a text message.
-  const msg = twiml.message(
-    "Thanks for texting the Quarter-Life Crisis Hotline. Give us a call at (812) 487-3463"
-  );
-
-  // Add a picture message.
-  msg.media("https://quarterlifecris.is/social-preview.jpg");
-
-  res.writeHead(200, { "Content-Type": "text/xml" });
-  res.end(twiml.toString());
-});
-
+/// INCOMING VOICE RESPONSE
 router.post("/voice-response", function (req, res, next) {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
 
-  // Creates an array of jokes and randomly chooses one to deliver
-  const jokes = [
-    "Adopt an ant farm",
-    "Get really into lock-picking",
-    "Download TikTok",
-    "Adopt a pet raccoon",
-    "do something involving a lizard ",
-    "Get really into day trading ",
-    "Get a planet fitness membership",
-    "Buy kettlebells",
-    "Become a barista at a cute coffee shop and quit two-weeks later",
-    "Start a SoundCloud and learn to rap",
-    "Become an e-girl",
-    "Start making kombucha and forget about it",
-    "Create a quarter-life crisis hotline instead of actually getting a job",
-    "Start an alt-twitter",
-    "Move to Ohio",
-    "Move to New York",
-    "Move to Colorado",
-    "Move to California",
-    "Get a nose piercing",
-    "Get a tattoo",
-    "Dye your hair",
-    "Start listening to way too much Hozier",
-    "Buy a tiny a house",
-    "Buy a 3D printer",
-    "Start making memes for Instagram",
-    "Start a creator house",
-    "Get married too soon",
-    "Start a podcast about dating",
-    "Start a podcast about crypto",
-    "Get really into doge coin",
-    "Rob a bank",
-    "Start going to therapy",
-    "Become low-key alcoholic",
-    "Become high-key alcoholic",
-    "Quit your salaried job to become a bartender",
-    "Start brewing IPAs in your kitchen",
-    "Get really into 3D printing ",
-    "Start knitting scarves",
-    "Take a trip to Miami",
-    "Start an agency",
-    "Tell all your friends you’re going to become a pilot",
-    "Tyedye EVERYTHING in your closet",
-    "Start a depop even though you own no clothes",
-    "Start a podcast",
-    "Start doing pottery",
-    "Start a band",
-    "Start a skater girl gang",
-  ];
+  const gather = twiml.gather({
+    numDigits: 1,
+    timeout: 6,
+    action: "/gather-person",
+    input: "dtmf",
+  });
 
+  gather.say(
+    "If you're currently going through a Quarter-Life Crisis, press 1. If someone you know is going through a Quarter-Life Crisis, press 2. If you're in denial, press 3. If you're looking for the Mid-Life Crisis Hotline, please hang up and call again in 30 years.",
+    { voice: voice }
+  );
+
+  // If the user doesn't enter input, loop
+  twiml.redirect("/voice-response");
+
+  // Render the response as XML in reply to the webhook request
+  response.type("text/xml");
+  response.send(twiml.toString());
+});
+
+/// INCOMING VOICE RESPONSE
+router.post("/call-a-friend", function (req, res, next) {
+  // creates new VoiceResponse object
+  var VoiceResponse = twilio.twiml.VoiceResponse;
+  var twiml = new VoiceResponse();
+
+  twiml.say(
+    "Hi there, one of your friends told us you're going through a Quarter-Life Crisis. We're here to help!"
+    { voice: voice }
+  );
+
+  // If the user doesn't enter input, loop
+  twiml.redirect("/ask-job");
+
+  // Render the response as XML in reply to the webhook request
+  response.type("text/xml");
+  response.send(twiml.toString());
+});
+
+router.post("/say-joke", (req, res, next) => {
   const indexOne = Math.floor(Math.random() * jokes.length);
   const indexTwo = Math.floor(Math.random() * jokes.length);
 
   if (indexOne == indexTwo) indexTwo = Math.floor(Math.random() * jokes.length);
-
-  const voice = "Polly.Amy";
-
-  // creates the text-to-speech response
-  twiml.say("Hello! Thank you for calling the Quarter-Life Crisis Hotline.", {
-    voice: voice,
-  });
-  twiml.pause({ length: 0.5 });
-
-  twiml.say(
-    "We're here to help you figure out what you're doing with your life.",
-    {
-      voice: voice,
-    }
-  );
-  twiml.pause({ length: 0.5 });
-
-  // twiml.say(
-  //   "Give me just one second and I'll come up with some suggestions for you.",
-  //   {
-  //     voice: voice,
-  //   }
-  // );
-  // twiml.pause({ length: 2 });
 
   twiml.say("The universe is telling me that you should...", {
     voice: voice,
@@ -175,6 +131,144 @@ router.post("/voice-response", function (req, res, next) {
   );
 
   res.send(twiml.toString());
+});
+
+// Create a route that will handle <Gather> input
+router.post("/gather-person", (request, response) => {
+  // Use the Twilio Node.js SDK to build an XML response
+  // creates new VoiceResponse object
+  var VoiceResponse = twilio.twiml.VoiceResponse;
+  var twiml = new VoiceResponse();
+
+  // If the user entered digits, process their request
+  if (request.body.Digits) {
+    switch (request.body.Digits) {
+      case "1":
+        twiml.say("You selected yourself.", { voice, voice });
+        twiml.pause();
+        twiml.redirect("/ask-job");
+
+        break;
+      case "2":
+        twiml.say("You selected someone else.", { voice, voice });
+        twiml.pause();
+        twiml.redirect("/someone-else");
+        break;
+      case "3":
+        twiml.say(
+          "Hmm. You're in denial, okay. Why don't you call back when you're ready.",
+          { voice, voice }
+        );
+        twiml.pause();
+        twiml.say("Goodbye!", { voice, voice });
+        twiml.hangup();
+        break;
+
+      default:
+        twiml.say("Sorry, I don't understand that choice.");
+        twiml.pause();
+        twiml.redirect("/voice-response");
+        break;
+    }
+  } else {
+    // If no input was sent, redirect to the /voice route
+    twiml.redirect("/voice-response");
+  }
+
+  // Render the response as XML in reply to the webhook request
+  response.type("text/xml");
+  response.send(twiml.toString());
+});
+
+router.post("/ask-job", function (req, res, next) {
+  // creates new VoiceResponse object
+  var VoiceResponse = twilio.twiml.VoiceResponse;
+  var twiml = new VoiceResponse();
+
+  const gather = twiml.gather({
+    numDigits: 1,
+    timeout: 6,
+    action: "/quit-job",
+    input: "dtmf",
+  });
+
+  gather.say(
+    "Okay, first, have you quit your job already? Press 1 for yes. Press 2 for no.",
+    { voice: voice }
+  );
+
+  // If the user doesn't enter input, loop
+  // twiml.say("Are you there?")
+  twiml.redirect("/ask-job");
+
+  // Render the response as XML in reply to the webhook request
+  response.type("text/xml");
+  response.send(twiml.toString());
+});
+
+router.post("/quit-job", (req, res, next) => {
+  var VoiceResponse = twilio.twiml.VoiceResponse;
+  var twiml = new VoiceResponse();
+
+  // If the user entered digits, process their request
+  if (request.body.Digits) {
+    switch (request.body.Digits) {
+      case "1":
+        twiml.say("Congrats! Go off queen! Capitalism is made-up anyways.", {
+          voice: voice,
+        });
+        twiml.pause();
+        twiml.say(
+          "Now, give me just a second and I'll find something else for you to do with your life.",
+          { voice: voice }
+        );
+        twiml.pause();
+        twiml.redirect("/say-joke");
+
+        break;
+      case "2":
+        twiml.say("YOLO. Go ahead and quit that job ASAP.", {
+          voice: voice,
+        });
+        twiml.pause();
+        twiml.say("Let me find something else for you to do with your life.", {
+          voice: voice,
+        });
+        twiml.pause();
+        twiml.redirect("/say-joke");
+        break;
+
+      default:
+        twiml.say("Hey, I said press 1 or 2. What are you trying here?");
+        twiml.pause();
+        twiml.hangup();
+        break;
+    }
+  } else {
+    // If no input was sent, redirect to the /voice route
+    twiml.redirect("/ask-job");
+  }
+
+  // Render the response as XML in reply to the webhook request
+  response.type("text/xml");
+  response.send(twiml.toString());
+});
+
+router.post("/someone-else", function (req, res, next) {
+  // creates new VoiceResponse object
+  var VoiceResponse = twilio.twiml.VoiceResponse;
+  var twiml = new VoiceResponse();
+
+  twiml.say(
+    "We just sent you a text that you can forward to your friend. Hope it helps! Thanks for calling and goodbye.",
+    { voice }
+  );
+
+  twiml.redirect("/sms/get-number");
+
+  // Render the response as XML in reply to the webhook request
+  response.type("text/xml");
+  response.send(twiml.toString());
 });
 
 module.exports = router;
