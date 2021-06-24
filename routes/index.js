@@ -52,7 +52,7 @@ router.post("/humor-hotline", function (req, res, next) {
 });
 
 /// INCOMING VOICE RESPONSE
-router.post("/voice-response", function (req, res, next) {
+router.post("/voice-response", function (request, response, next) {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
@@ -78,7 +78,7 @@ router.post("/voice-response", function (req, res, next) {
 });
 
 /// INCOMING VOICE RESPONSE
-router.post("/call-a-friend", (req, res, next) => {
+router.post("/call-a-friend", (request, response, next) => {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
@@ -180,7 +180,7 @@ router.post("/gather-person", (request, response) => {
   response.send(twiml.toString());
 });
 
-router.post("/ask-job", function (req, res, next) {
+router.post("/ask-job", function (request, response, next) {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
