@@ -5,7 +5,10 @@ var twilio = require("twilio");
 const jokes = require("./jokes");
 const prompts = require("./prompts");
 
-const client = require("./index").client;
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 const STATES = {
   NEW: 0,
@@ -107,25 +110,18 @@ router.post("/get-suggestion", (req, res) => {
 //// SMS RESPONSE
 router.post("/get-number", (req, res) => {
   const number = req.body.Body.replace("[()\\s-]+", "");
-  const host = "https://quarterlifecris.is:5000";
+  // const host = "https://quarterlifecris.is:5000";
 
   req.session.state = STATES.JOKE_SENT;
 
-  client.calls
+  client.messages
     .create({
-      url: `${host}/call-a-friend`,
-      to: `+${number}`,
-      from: "+18124873463",
+      body: "Hi there, one of your friends told us you're going through a Quarter-Life Crisis. We're here to help! Text or call us back to find out what you should be doing with your life. \n\n https://quarterlifecris.is",
+      from: "+8124873463",
+      to: number,
+      mediaUrl: ["https://quarterlifecris.is/social-preview.jpg"],
     })
-    .then((call) => {
-      res.send(call);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-
-  res.writeHead(200, { "Content-Type": "text/xml" });
-  res.end(twiml.toString());
+    .then((message) => console.log(message.sid));
 });
 
 //// SMS RESPONSE
