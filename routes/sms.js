@@ -34,6 +34,11 @@ router.post("/", function (req, res, next) {
     twiml.redirect("/sms/get-person");
   } else if (state == STATES.WAITING_FOR_PHONE_NUMBER) {
     twiml.redirect("/sms/get-number");
+  } else if (state == STATES.JOKE_SENT) {
+    twiml.message(
+      "Need some more help? brb, Let me find something you could do with your life."
+    );
+    twiml.redirect("/sms/say-joke");
   } else {
     msg = twiml.message(
       "Thanks for texting the Quarter-Life Crisis Hotline! We're here to help. Who's currently going through a crisis? \n 1) Me \n 2) Someone else"
