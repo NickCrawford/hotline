@@ -55,7 +55,7 @@ router.post("/", function (req, res, next) {
     }
   } else {
     msg = twiml.message(
-      "Thanks for texting the Quarter-Life Crisis Hotline! We're here to help. Who's currently going through a crisis? \n 1) Me \n 2) Someone else"
+      "Thanks for texting the Quarter-Life Crisis Hotline! We're here to help 💪\n\nWho's currently going through a crisis? \n 1) Me \n 2) Someone else"
     );
 
     // Add a picture message.
@@ -169,6 +169,10 @@ router.post("/say-joke", function (req, res, next) {
       emojiTwo +
       "\n\n" +
       "I hope that helps! Let us know how it works out 🕺🏻 \n"
+  );
+
+  msg.media(
+    "https://source.unsplash.com/400x400/?" + encodeURI(jokes[indexOne])
   );
 
   if (req.session && req.session.counter > 0) {
