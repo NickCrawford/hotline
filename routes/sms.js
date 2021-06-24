@@ -101,10 +101,19 @@ router.post("/say-joke", function (req, res, next) {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
+  const prompt = "The universe is telling me you should...";
   // Add a text message.
+
+  const indexOne = Math.floor(Math.random() * jokes.length);
+  const indexTwo = Math.floor(Math.random() * jokes.length);
+
+  if (indexOne == indexTwo) indexTwo = Math.floor(Math.random() * jokes.length);
+
   let msg = twiml.message(
-    "Thanks for texting the Quarter-Life Crisis Hotline! We're here to help. Who's currently going through a crisis? \n 1) Me \n 2) Someone else"
+    prompt + "\n" + jokes[indexOne] + "\n and \n" + jokes[indexTwo]
   );
+
+  twiml.message("I hope that helps! Let us know how it works out 🕺🏻");
 
   req.session.state = STATES.JOKE_SENT;
 
