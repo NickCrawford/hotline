@@ -72,6 +72,9 @@ router.post("/voice-response", function (request, response, next) {
     "Hello, thank you for calling the Quarter-Life Crisis Hotline. If you're currently going through a Quarter-Life Crisis, press 1. If someone you know is going through a Quarter-Life Crisis, press 2. If you're in denial, press 3. If you're looking for the Mid Life Crisis Hotline, please hang up and call again in 30 years.",
     { voice: voice }
   );
+  gather.say.prosody({
+    rate: "110%",
+  });
 
   // If the user doesn't enter input, loop
   twiml.redirect("/voice-response");
