@@ -153,7 +153,7 @@ footer {
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(375px, max-content));
+  grid-template-columns: repeat(auto-fit, minmax(275px, max-content));
   column-gap: 0.5rem;
 
   align-items: center;
