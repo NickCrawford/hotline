@@ -220,9 +220,21 @@ router.post("/say-joke", function (req, res, next) {
     req.session.counter = req.session.counter + 1;
   } else {
     req.session.counter = 1;
-    twiml.message(
-      "Help a friend with their own quarter-life crisis by replying 'friend'.\n\nReply 'suggest' if you'd like to leave a new quarter-life crisis idea for others. \n"
-    );
+
+    setTimeout(() => {
+      client.messages
+        .create({
+          body: "Have a friend going through their own quarter-life crisis? Reply 'friend' to share this!\n\nReply 'suggest' if you'd like to leave a new quarter-life crisis idea for others. \n",
+          from: "+18124873463",
+          to: req.params.from,
+        })
+        .then((message) => {
+          res.send(message);
+        })
+        .catch((err) => {
+          res.send(err);
+        });
+    }, 3000);
   }
 
   req.session.state = STATES.JOKE_SENT;
