@@ -27,7 +27,20 @@ router.post("/", function (req, res, next) {
 
   const state = req.session.state || STATES.NEW;
 
-  console.log(state);
+  if (req.session && req.session.counter == 4) {
+    return client.messages
+      .create({
+        body: "Geez, you must really be struggling. I can't come up with ideas fast enough for you. Why dont you follow me on Twitter instead? \n\n 👉 https://twitter.com/NickCrawwwford",
+        from: "+18124873463",
+        to: req.body.From,
+      })
+      .then((message) => {
+        res.send(message);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+  }
 
   // Add a text message.
   let msg;
@@ -59,7 +72,7 @@ router.post("/", function (req, res, next) {
     );
 
     // Add a picture message.
-    // msg.media("https://quarterlifecris.is/social-preview.jpg");
+    msg.media("https://quarterlifecris.is/social-preview.jpg");
     req.session.state = STATES.WAITING_FOR_PERSON;
   }
 
