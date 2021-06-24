@@ -156,7 +156,7 @@ router.post("/say-joke", function (req, res, next) {
   let msg = twiml.message(
     prompt +
       "\n\n" +
-      +emojiOne +
+      emojiOne +
       " " +
       jokes[indexOne] +
       " " +
