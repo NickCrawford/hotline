@@ -27,6 +27,8 @@ router.post("/", function (req, res, next) {
 
   const state = req.session.state || STATES.NEW;
 
+  console.log(state);
+
   // Add a text message.
   let msg;
 
@@ -57,7 +59,7 @@ router.post("/", function (req, res, next) {
     );
 
     // Add a picture message.
-    msg.media("https://quarterlifecris.is/social-preview.jpg");
+    // msg.media("https://quarterlifecris.is/social-preview.jpg");
     req.session.state = STATES.WAITING_FOR_PERSON;
   }
 
@@ -110,7 +112,6 @@ router.post("/get-suggestion", (req, res) => {
 //// SMS RESPONSE
 router.post("/get-number", (req, res) => {
   const number = req.body.Body.replace("[()\\s-]+", "");
-  // const host = "https://quarterlifecris.is:5000";
 
   req.session.state = STATES.JOKE_SENT;
 
@@ -121,7 +122,12 @@ router.post("/get-number", (req, res) => {
       to: number,
       mediaUrl: ["https://quarterlifecris.is/social-preview.jpg"],
     })
-    .then((message) => console.log(message.sid));
+    .then((message) => {
+      res.send(message);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 //// SMS RESPONSE
