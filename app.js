@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(session({ secret: process.env.SESSION_SECRET }));
 
 app.use("/", indexRouter);
 app.use("/sms", smsRouter);
@@ -28,8 +29,6 @@ app.use("/sms", smsRouter);
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
-app.use(session({ secret: process.env.SESSION_SECRET }));
 
 // error handler
 app.use(function (err, req, res, next) {

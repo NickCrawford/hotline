@@ -23,6 +23,8 @@ router.post("/", function (req, res, next) {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
+  console.log("request.session", req.session);
+
   const state = req.session.state || STATES.NEW;
 
   // Add a text message.
