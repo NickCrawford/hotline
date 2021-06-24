@@ -117,7 +117,7 @@ router.post("/get-number", (req, res) => {
   client.messages
     .create({
       body: "Hi there, one of your friends told us you're going through a Quarter-Life Crisis. We're here to help! Text or call us back to find out what you should be doing with your life. \n\n https://quarterlifecris.is",
-      from: "+8124873463",
+      from: "+18124873463",
       to: number,
       mediaUrl: ["https://quarterlifecris.is/social-preview.jpg"],
     })
