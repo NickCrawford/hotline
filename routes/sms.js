@@ -7,11 +7,6 @@ const prompts = require("./prompts");
 
 const client = require("./index").client;
 
-// const client = twilio(
-//   process.env.TWILIO_ACCOUNT_SID,
-//   process.env.TWILIO_AUTH_TOKEN
-// );
-
 const STATES = {
   NEW: 0,
   WAITING_FOR_PERSON: 1,
@@ -45,7 +40,7 @@ router.post("/", function (req, res, next) {
       );
       req.session.state = STATES.WAITING_FOR_PHONE_NUMBER;
     } else if (req.body.Body.toLowerCase().includes("suggest")) {
-      twiml.message("How do you cope with a quarter-life crisis?");
+      twiml.message("How do you cope with your quarter-life crisis?");
       req.session.state = STATES.WAITING_FOR_SUGGESTION;
     } else {
       twiml.message(
@@ -147,34 +142,33 @@ router.post("/say-joke", function (req, res, next) {
   if (indexOne == indexTwo) indexTwo = Math.floor(Math.random() * jokes.length);
 
   const allowedEmoji =
-    "💩👻👽🤖👾👐🖖✌️🤟🤘🤙👋🐭🦕🦖🐉✨🎸🌮📍✅🙌🔥🕺🏻😭🐶🥳🎱🏄‍♀️🏆✈️🗿⌛️🔌💡🔮🛁🎊🎉✂️❤️🖤🎵";
+    "💩👻👽🤖👾👐🖖✌️🤟🤘🤙👋🐭🦕🦖🐉✨🎸🌮📍✅🙌🔥🕺😭🐶🥳🎱🏄‍♀️🏆✈️🗿⌛️🔌💡🔮🛁🎊🎉✂️❤️🖤🎵";
   const emojiOne =
     allowedEmoji[Math.floor(Math.random() * allowedEmoji.length)];
   const emojiTwo =
     allowedEmoji[Math.floor(Math.random() * allowedEmoji.length)];
 
   console.log(emojiOne, emojiTwo);
-  let msg = twiml.message();
-  msg.body(
+  let msg = twiml.message(
     prompt +
       "\n\n" +
-      // emojiOne +
+      emojiOne +
       " " +
       jokes[indexOne] +
       " " +
-      // emojiOne +
+      emojiOne +
       "\n~ and ~\n" +
-      // emojiTwo +
+      emojiTwo +
       " " +
       jokes[indexTwo] +
       " " +
-      // emojiTwo +
+      emojiTwo +
       "\n\n" +
       "I hope that helps! Let us know how it works out\n"
   );
 
   msg.media(
-    "https://source.unsplash.com/400x400/?" + encodeURI(jokes[indexOne])
+    "https://source.unsplash.com/300x300/?" + encodeURI(jokes[indexOne])
   );
 
   if (req.session && req.session.counter > 0) {
