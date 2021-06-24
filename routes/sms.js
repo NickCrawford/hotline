@@ -153,28 +153,29 @@ router.post("/say-joke", function (req, res, next) {
   const emojiTwo =
     allowedEmoji[Math.floor(Math.random() * allowedEmoji.length)];
 
+  console.log(emojiOne, emojiTwo);
   let msg = twiml.message();
   msg.body(
     prompt +
       "\n\n" +
-      emojiOne +
+      // emojiOne +
       " " +
       jokes[indexOne] +
       " " +
-      emojiOne +
+      // emojiOne +
       "\n~ and ~\n" +
-      emojiTwo +
+      // emojiTwo +
       " " +
       jokes[indexTwo] +
       " " +
-      emojiTwo +
+      // emojiTwo +
       "\n\n" +
       "I hope that helps! Let us know how it works out\n"
   );
 
-  // msg.media(
-  //   "https://source.unsplash.com/400x400/?" + encodeURI(jokes[indexOne])
-  // );
+  msg.media(
+    "https://source.unsplash.com/400x400/?" + encodeURI(jokes[indexOne])
+  );
 
   if (req.session && req.session.counter > 0) {
     req.session.counter = req.session.counter + 1;
