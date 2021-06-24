@@ -226,7 +226,7 @@ router.post("/say-joke", function (req, res, next) {
         .create({
           body: "Have a friend going through their own quarter-life crisis? Reply 'friend' to share this!\n\nReply 'suggest' if you'd like to leave a new quarter-life crisis idea for others. \n",
           from: "+18124873463",
-          to: req.params.from,
+          to: req.body.From,
         })
         .then((message) => {
           res.send(message);
