@@ -3,6 +3,7 @@ var router = express.Router();
 
 var twilio = require("twilio");
 const jokes = require("./jokes");
+const prompts = require("./prompts");
 
 const client = require("./index").client;
 
@@ -16,6 +17,7 @@ const STATES = {
   WAITING_FOR_PERSON: 1,
   WAITING_FOR_PHONE_NUMBER: 2,
   JOKE_SENT: 3,
+  WAITING_FOR_SUGGESTION: 4,
 };
 
 //// SMS RESPONSE
@@ -34,11 +36,23 @@ router.post("/", function (req, res, next) {
     twiml.redirect("/sms/get-person");
   } else if (state == STATES.WAITING_FOR_PHONE_NUMBER) {
     twiml.redirect("/sms/get-number");
+  } else if (state == STATES.WAITING_FOR_SUGGESTION) {
+    twiml.redirect("/sms/get-suggestion");
   } else if (state == STATES.JOKE_SENT) {
-    twiml.message(
-      "Need some more help? brb, Let me find something you could do with your life."
-    );
-    twiml.redirect("/sms/say-joke");
+    if (req.body.Body.toLowerCase().includes("friend")) {
+      twiml.message(
+        "Reply to this message with your friend's phone number and we'll take it from here."
+      );
+      req.session.state = STATES.WAITING_FOR_PHONE_NUMBER;
+    } else if (req.body.Body.toLowerCase().includes("suggest")) {
+      twiml.message("How do you cope with a quarter-life crisis?");
+      req.session.state = STATES.WAITING_FOR_SUGGESTION;
+    } else {
+      twiml.message(
+        "Need some more help? brb, Let me find something you could do with your life."
+      );
+      twiml.redirect("/sms/say-joke");
+    }
   } else {
     msg = twiml.message(
       "Thanks for texting the Quarter-Life Crisis Hotline! We're here to help. Who's currently going through a crisis? \n 1) Me \n 2) Someone else"
@@ -58,12 +72,19 @@ router.post("/get-person", (req, res) => {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
-  if (req.body.Body.includes("1") || req.body.Body.includes("me")) {
+  if (
+    req.body.Body.includes("1") ||
+    req.body.Body.toLowerCase().includes("me")
+  ) {
     twiml.message(
       "Alright, let me find something for you to do with your life..."
     );
     twiml.redirect("/sms/say-joke");
-  } else if (req.body.Body.includes("2") || req.body.Body.includes("someone")) {
+  } else if (
+    req.body.Body.includes("2") ||
+    req.body.Body.toLowerCase().includes("someone") ||
+    req.body.Body.toLowerCase().includes("else")
+  ) {
     twiml.message(
       "Reply to this message with your friend's phone number and we'll take it from here."
     );
@@ -72,6 +93,17 @@ router.post("/get-person", (req, res) => {
     twiml.message("Sorry! I didn't understand that. Try again in a bit.");
     req.session.state = STATES.NEW;
   }
+
+  res.writeHead(200, { "Content-Type": "text/xml" });
+  res.end(twiml.toString());
+});
+
+router.post("/get-suggestion", (req, res) => {
+  const MessagingResponse = twilio.twiml.MessagingResponse;
+  const twiml = new MessagingResponse();
+
+  twiml.message("Thanks for the suggestion!");
+  req.session.state = STATES.JOKE_SENT;
 
   res.writeHead(200, { "Content-Type": "text/xml" });
   res.end(twiml.toString());
@@ -106,7 +138,7 @@ router.post("/say-joke", function (req, res, next) {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
-  const prompt = "The universe is telling me you should...";
+  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
   // Add a text message.
 
   const indexOne = Math.floor(Math.random() * jokes.length);
@@ -114,11 +146,39 @@ router.post("/say-joke", function (req, res, next) {
 
   if (indexOne == indexTwo) indexTwo = Math.floor(Math.random() * jokes.length);
 
+  const allowedEmoji =
+    "💩👻👽🤖👾👐🖖✌️🤟🤘🤙👋🐭🦕🦖🐉✨🎸🌮📍✅🙌🔥🕺🏻😭🐶🥳🎱🏄‍♀️🏆✈️🗿⌛️🔌💡🔮🛁🎊🎉✂️❤️🖤🎵";
+  const emojiOne =
+    allowedEmoji[Math.floor(Math.random() * allowedEmoji.length)];
+  const emojiTwo =
+    allowedEmoji[Math.floor(Math.random() * allowedEmoji.length)];
+
   let msg = twiml.message(
-    prompt + "\n" + jokes[indexOne] + "\n and \n" + jokes[indexTwo]
+    prompt +
+      "\n\n" +
+      +emojiOne +
+      " " +
+      jokes[indexOne] +
+      " " +
+      emojiOne +
+      +"\n~ and ~\n" +
+      emojiTwo +
+      " " +
+      jokes[indexTwo] +
+      " " +
+      emojiTwo +
+      "\n\n" +
+      "I hope that helps! Let us know how it works out 🕺🏻 \n"
   );
 
-  twiml.message("I hope that helps! Let us know how it works out 🕺🏻");
+  if (req.session && req.session.counter > 0) {
+    req.session.counter = req.session.counter + 1;
+  } else {
+    req.session.counter = 1;
+    twiml.message(
+      "Help a friend with their own quarter-life crisis by replying 'friend'.\n\nReply 'suggest' if you'd like to leave a new quarter-life crisis idea for others. \n"
+    );
+  }
 
   req.session.state = STATES.JOKE_SENT;
 
