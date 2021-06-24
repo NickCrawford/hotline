@@ -9,32 +9,36 @@ const client = twilio(
   process.env.TWILIO_AUTH_TOKEN
 );
 
-const voice = "alice";
+const voice = "Polly.Amy";
 
 /// PAGES
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Quarter-Life Crisis Hotline" });
+router.get("/", function (request, response, next) {
+  response.render("index", { title: "Quarter-Life Crisis Hotline" });
 });
 
-router.get("/suggest", function (req, res, next) {
-  res.render("suggest", { title: "Quarter-Life Crisis Hotline - Suggest" });
+router.get("/suggest", function (request, response, next) {
+  response.render("suggest", {
+    title: "Quarter-Life Crisis Hotline - Suggest",
+  });
 });
 
-router.get("/about", function (req, res, next) {
-  res.render("about", { title: "Quarter-Life Crisis Hotline - About" });
+router.get("/about", function (request, response, next) {
+  response.render("about", { title: "Quarter-Life Crisis Hotline - About" });
 });
 
-router.get("/resources", function (req, res, next) {
-  res.render("resources", { title: "Quarter-Life Crisis Hotline - Resources" });
+router.get("/resources", function (request, response, next) {
+  response.render("resources", {
+    title: "Quarter-Life Crisis Hotline - Resources",
+  });
 });
 
 ///
 ////// OUTBOUND CALLING
 ///
-router.post("/humor-hotline", function (req, res, next) {
+router.post("/humor-hotline", function (request, response, next) {
   // route code here
-  const number = req.body.number.replace("[()\\s-]+", "");
+  const number = request.body.number.replace("[()\\s-]+", "");
   const host = "https://quarterlifecris.is:5000";
 
   client.calls
@@ -44,10 +48,10 @@ router.post("/humor-hotline", function (req, res, next) {
       from: "+18124873463",
     })
     .then((call) => {
-      res.send(call);
+      response.send(call);
     })
     .catch((err) => {
-      res.send(err);
+      response.send(err);
     });
 });
 
@@ -59,13 +63,13 @@ router.post("/voice-response", function (request, response, next) {
 
   const gather = twiml.gather({
     numDigits: 1,
-    timeout: 6,
+    timeout: 10,
     action: "/gather-person",
     input: "dtmf",
   });
 
   gather.say(
-    "Hello, thank you for calling the Quarter-Life Crisis Hotline. If you're currently going through a Quarter-Life Crisis, press 1. If someone you know is going through a Quarter-Life Crisis, press 2. If you're in denial, press 3. If you're looking for the Mid-Life Crisis Hotline, please hang up and call again in 30 years.",
+    "Hello, thank you for calling the Quarter-Life Crisis Hotline. If you're currently going through a Quarter-Life Crisis, press 1. If someone you know is going through a Quarter-Life Crisis, press 2. If you're in denial, press 3. If you're looking for the Mid Life Crisis Hotline, please hang up and call again in 30 years.",
     { voice: voice }
   );
 
@@ -96,7 +100,7 @@ router.post("/call-a-friend", (request, response, next) => {
   response.send(twiml.toString());
 });
 
-router.post("/say-joke", (req, res, next) => {
+router.post("/say-joke", (request, response, next) => {
   const indexOne = Math.floor(Math.random() * jokes.length);
   const indexTwo = Math.floor(Math.random() * jokes.length);
 
@@ -130,7 +134,7 @@ router.post("/say-joke", (req, res, next) => {
     }
   );
 
-  res.send(twiml.toString());
+  response.send(twiml.toString());
 });
 
 // Create a route that will handle <Gather> input
@@ -144,7 +148,7 @@ router.post("/gather-person", (request, response) => {
   if (request.body.Digits) {
     switch (request.body.Digits) {
       case "1":
-        twiml.say("You selected yourself.", { voice, voice });
+        // twiml.say("You selected yourself.", { voice, voice });
         twiml.pause();
         twiml.redirect("/ask-job");
 
@@ -206,7 +210,7 @@ router.post("/ask-job", function (request, response, next) {
   response.send(twiml.toString());
 });
 
-router.post("/quit-job", (req, res, next) => {
+router.post("/quit-job", (request, response, next) => {
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
 
@@ -254,7 +258,7 @@ router.post("/quit-job", (req, res, next) => {
   response.send(twiml.toString());
 });
 
-router.post("/someone-else", function (req, res, next) {
+router.post("/someone-else", function (request, response, next) {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
