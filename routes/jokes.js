@@ -8,7 +8,7 @@ const jokes = [
   "Get a planet fitness membership",
   "Buy kettlebells",
   "Become a barista at a cute coffee shop and quit two-weeks later",
-  "Start a SoundCloud and learn to rap",
+  "Start a Sound Cloud and learn to rap",
   "Become an e-girl",
   "Start making kombucha",
   "Create a quarter-life crisis hotline instead of actually getting a job",

@@ -1,3 +1,4 @@
+const { request } = require("express");
 var express = require("express");
 var router = express.Router();
 
@@ -27,7 +28,7 @@ router.post("/", function (req, res, next) {
 
   const state = req.session.state || STATES.NEW;
 
-  if (req.session && req.session.counter == 4) {
+  if (req.session && req.session.counter == 3) {
     return client.messages
       .create({
         body: "Geez, you must really be struggling. I can't come up with ideas fast enough for you. Why dont you follow me on Twitter instead? \n\n 👉 https://twitter.com/NickCrawwwford",

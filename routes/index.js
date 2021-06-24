@@ -273,7 +273,7 @@ router.post("/someone-else", function (request, response, next) {
 
   client.messages
     .create({
-      body: "Hi there, this is the Quarter-Life Crisis Hotline. Reply with your friend's phone number and we'll help them out. \n\n https://quarterlifecris.is",
+      body: "Hi there, this is the Quarter-Life Crisis Hotline. Reply with 'START' to begin. \n\n https://quarterlifecris.is",
       from: "+18124873463",
       to: request.body.From,
     })
