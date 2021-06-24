@@ -54,7 +54,7 @@ router.post("/", function (req, res, next) {
   } else if (state == STATES.JOKE_SENT) {
     if (req.body.Body.toLowerCase().includes("friend")) {
       twiml.message(
-        "Reply to this message with your friend's phone number and we'll take it from here."
+        "Reply to this message with your friend's phone number and we'll help them out!"
       );
       req.session.state = STATES.WAITING_FOR_PHONE_NUMBER;
     } else if (req.body.Body.toLowerCase().includes("suggest")) {
@@ -141,6 +141,14 @@ router.post("/get-number", (req, res) => {
     .catch((err) => {
       res.send(err);
     });
+
+  const MessagingResponse = twilio.twiml.MessagingResponse;
+  const twiml = new MessagingResponse();
+
+  twiml.message("Got it! Thanks. We'll take it from here.");
+
+  res.writeHead(200, { "Content-Type": "text/xml" });
+  res.send(twiml.toString());
 });
 
 //// SMS RESPONSE
