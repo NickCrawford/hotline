@@ -23,7 +23,7 @@ router.post("/", function (req, res, next) {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
-  console.log("request.session", req.session);
+  if (!req.session.state) req.session.state = STATES.NEW;
 
   const state = req.session.state || STATES.NEW;
 
@@ -50,6 +50,7 @@ router.post("/", function (req, res, next) {
 
 //// SMS RESPONSE
 router.post("/get-person", (req, res) => {
+  const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
   if (req.body.Body.includes("1") || req.body.Body.includes("me")) {
