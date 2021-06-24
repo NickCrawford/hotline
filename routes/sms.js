@@ -99,7 +99,7 @@ router.post("/get-person", (req, res) => {
     req.body.Body.toLowerCase().includes("else")
   ) {
     twiml.message(
-      "Reply to this message with your friend's phone number and we'll take it from here."
+      "Reply to this message with your friend's phone number and we'll help them out!"
     );
     req.session.state = STATES.WAITING_FOR_PHONE_NUMBER;
   } else {

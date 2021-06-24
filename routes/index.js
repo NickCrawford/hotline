@@ -101,6 +101,9 @@ router.post("/call-a-friend", (request, response, next) => {
 });
 
 router.post("/say-joke", (request, response, next) => {
+  var VoiceResponse = twilio.twiml.VoiceResponse;
+  var twiml = new VoiceResponse();
+
   const indexOne = Math.floor(Math.random() * jokes.length);
   const indexTwo = Math.floor(Math.random() * jokes.length);
 
@@ -268,7 +271,19 @@ router.post("/someone-else", function (request, response, next) {
     { voice }
   );
 
-  twiml.redirect("/sms/get-number");
+  client.messages
+    .create({
+      body: "Hi there, this is the Quarter-Life Crisis Hotline. Reply with your friend's phone number and we'll help them out. \n\n https://quarterlifecris.is",
+      from: "+18124873463",
+      to: request.body.From,
+    })
+    .then((message) => {
+      response.send(message);
+      request.session.state = 2;
+    })
+    .catch((err) => {
+      response.send(err);
+    });
 
   // Render the response as XML in reply to the webhook request
   response.type("text/xml");
