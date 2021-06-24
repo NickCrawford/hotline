@@ -4,12 +4,12 @@ var router = express.Router();
 var twilio = require("twilio");
 const jokes = require("./jokes");
 
-import client from "./index";
+const client = require("./index").client;
 
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+// const client = twilio(
+//   process.env.TWILIO_ACCOUNT_SID,
+//   process.env.TWILIO_AUTH_TOKEN
+// );
 
 const STATES = {
   NEW: 0,

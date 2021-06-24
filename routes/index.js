@@ -4,7 +4,7 @@ var twilio = require("twilio");
 var env = require("dotenv").config();
 const jokes = require("./jokes");
 
-export const client = twilio(
+const client = twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
 );
@@ -78,13 +78,13 @@ router.post("/voice-response", function (req, res, next) {
 });
 
 /// INCOMING VOICE RESPONSE
-router.post("/call-a-friend", function (req, res, next) {
+router.post("/call-a-friend", (req, res, next) => {
   // creates new VoiceResponse object
   var VoiceResponse = twilio.twiml.VoiceResponse;
   var twiml = new VoiceResponse();
 
   twiml.say(
-    "Hi there, one of your friends told us you're going through a Quarter-Life Crisis. We're here to help!"
+    "Hi there, one of your friends told us you're going through a Quarter-Life Crisis. We're here to help!",
     { voice: voice }
   );
 
@@ -272,3 +272,4 @@ router.post("/someone-else", function (req, res, next) {
 });
 
 module.exports = router;
+module.exports.client = client;
