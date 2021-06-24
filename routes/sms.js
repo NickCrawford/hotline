@@ -172,9 +172,9 @@ router.post("/say-joke", function (req, res, next) {
       "I hope that helps! Let us know how it works out\n"
   );
 
-  msg.media(
-    "https://source.unsplash.com/400x400/?" + encodeURI(jokes[indexOne])
-  );
+  // msg.media(
+  //   "https://source.unsplash.com/400x400/?" + encodeURI(jokes[indexOne])
+  // );
 
   if (req.session && req.session.counter > 0) {
     req.session.counter = req.session.counter + 1;
