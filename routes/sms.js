@@ -169,7 +169,7 @@ router.post("/say-joke", function (req, res, next) {
       " " +
       emojiTwo +
       "\n\n" +
-      "I hope that helps! Let us know how it works out 🕺🏻 \n"
+      "I hope that helps! Let us know how it works out\n"
   );
 
   msg.media(
