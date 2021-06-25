@@ -1,6 +1,6 @@
-const { request } = require("express");
 var express = require("express");
 var router = express.Router();
+const fetch = require("node-fetch");
 
 var twilio = require("twilio");
 const jokes = require("./jokes");
@@ -157,8 +157,18 @@ router.post("/get-number", (req, res) => {
     });
 });
 
+// router.get("/test", async (req, res, next) => {
+//   let imgUrl = `https://api.giphy.com/v1/gifs/random?keyword=${encodeURI(
+//     "cool"
+//   )}&limit=1&rating=pg-13&api_key=8HeIIl610k43QxmIEgY0rZr931lMzcxY`;
+
+//   const { data } = await fetch(imgUrl).then((res) => res.json());
+
+//   console.log(data.images.downsized.url);
+// });
+
 //// SMS RESPONSE
-router.post("/say-joke", function (req, res, next) {
+router.post("/say-joke", async (req, res, next) => {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const twiml = new MessagingResponse();
 
@@ -239,9 +249,18 @@ router.post("/say-joke", function (req, res, next) {
       "I hope that helps! Let us know how it works out\n"
   );
 
-  msg.media(
-    "https://source.unsplash.com/300x300/?" + encodeURI(jokes[indexOne])
-  );
+  let imgUrl = `https://api.giphy.com/v1/gifs/random?keyword=${encodeURI(
+    jokes[indexOne]
+  )}&limit=1&rating=pg-13&api_key=8HeIIl610k43QxmIEgY0rZr931lMzcxY`;
+
+  let mediaUrl =
+    "https://source.unsplash.com/300x300/?" + encodeURI(jokes[indexOne]);
+  try {
+    const { data } = await fetch(imgUrl).then((res) => res.json());
+    mediaUrl = data.images.downsized.url;
+  } catch (err) {}
+
+  msg.media(mediaUrl);
 
   if (req.session && req.session.counter > 0) {
     req.session.counter = req.session.counter + 1;
