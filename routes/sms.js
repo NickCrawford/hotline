@@ -257,7 +257,7 @@ router.post("/say-joke", async (req, res, next) => {
     "https://source.unsplash.com/300x300/?" + encodeURI(jokes[indexOne]);
   try {
     const { data } = await fetch(imgUrl).then((res) => res.json());
-    mediaUrl = data.images.downsized_large.url;
+    mediaUrl = data.images.fixed_width.url;
   } catch (err) {}
 
   msg.media(mediaUrl);
